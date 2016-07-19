@@ -374,7 +374,7 @@ class Conferencer_Shortcode_Agenda extends Conferencer_Shortcode {
 			<?php echo do_shortcode("
 				[session_meta
 					post_id='$session->ID'
-					show='title,speakers".($session_tooltips ? '' : ',room')."'
+					show='title'
 					speakers_prefix='with '
 					room_prefix='in '
 					link_title=".($link_sessions ? 'true' : 'false')."

@@ -6,7 +6,7 @@ class Conferencer_Shortcode_Session_Meta extends Conferencer_Shortcode {
 	var $defaults = array(
 		'post_id' => false,
 		
-		'show' => "time,speakers,room,track,type,sponsors",
+		'show' => "time,speakers,room,track,type",
 		
 		'title_prefix' => "",
 		'time_prefix' => "",
