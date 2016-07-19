@@ -6,23 +6,27 @@ class Conferencer_Shortcode_Session_Meta extends Conferencer_Shortcode {
 	var $defaults = array(
 		'post_id' => false,
 		
-		'show' => "time,speakers,room,track,sponsors",
+		'show' => "time,speakers,room,track,type,sponsors",
 		
 		'title_prefix' => "",
 		'time_prefix' => "",
-		'speakers_prefix' => "Presented by ",
-		'room_prefix' => "Located in ",
-		'track_prefix' => "In track ",
-		'sponsors_prefix' => "Sponsored by ",
+		'speakers_prefix' => "Authors: ",
+		'room_prefix' => "Rooom: ",
+		'track_prefix' => "Theme: ",
+		'type_prefix' => "Type: ",
+		'chair_prefix' => "Chair: ",
+		'sponsors_prefix' => "Sponsored: ",
 
 		'title_suffix' => "",
 		'time_suffix' => "",
 		'speaker_suffix' => "",
 		'room_suffix' => "",
 		'track_suffix' => "",
+		'type_suffix' => "",
+		'chair_suffix' => "",
 		'sponsor_suffix' => "",
 
-		'date_format' => 'l, F j, Y',
+		'date_format' => 'D, M j Y',
 		'time_format' => 'g:ia',
 		'time_separator' => ' &ndash; ',
 		
@@ -31,6 +35,8 @@ class Conferencer_Shortcode_Session_Meta extends Conferencer_Shortcode {
 		'link_speakers' => true,
 		'link_room' => true,
 		'link_track' => true,
+		'link_type' => true,
+		'link_chair' => true,
 		'link_sponsors' => true,
 	);
 
@@ -58,6 +64,7 @@ class Conferencer_Shortcode_Session_Meta extends Conferencer_Shortcode {
 			$this->options['link_speakers'] = false;
 			$this->options['link_room'] = false;
 			$this->options['link_track'] = false;
+			$this->options['link_type'] = false;
 			$this->options['link_sponsors'] = false;
 		}
 	}
@@ -95,8 +102,11 @@ class Conferencer_Shortcode_Session_Meta extends Conferencer_Shortcode {
 					break;
 		
 				case 'speakers':
-					if (count($speakers = Conferencer::get_posts('speaker', $post->speakers))) {
+					if (count($speakers = Conferencer::get_posts('speaker', $post->speakers, 'id_or_order_sort'))) {
+						//$values = array_reverse($post->speakers);
 						$html = comma_separated_post_titles($speakers, $link_speakers);
+						//$html .= "<!-- ".json_encode($values). " -->";
+						//print_r($speakers);
 						$meta[] = "<span class='speakers'>".$speakers_prefix.$html.$speaker_suffix;
 					}
 					break;
@@ -117,7 +127,23 @@ class Conferencer_Shortcode_Session_Meta extends Conferencer_Shortcode {
 						$meta[] = "<span class='track'>".$track_prefix.$html.$track_suffix."</span>";
 					}
 					break;
-
+				
+				case 'type':
+					if ($post->type) {
+						$html = get_the_title($post->type);
+						if ($link_type) $html = "<a href='".get_permalink($post->type)."'>$html</a>";
+						$meta[] = "<span class='type'>".$type_prefix.$html.$type_suffix."</span>";
+					}
+					break;
+				
+				case 'chair':
+					if ($post->chair) {
+						$html = get_the_title($post->chair);
+						if ($link_chair) $html = "<a href='".get_permalink($post->chair)."'>$html</a>";
+						$meta[] = "<span class='chair'>".$chair_prefix.$html.$chair_suffix."</span>";
+					}
+					break;
+					
 				case 'sponsors':
 					if (count($sponsors = Conferencer::get_posts('sponsor', $post->sponsors))) {
 						$html = comma_separated_post_titles($sponsors, $link_sponsors);

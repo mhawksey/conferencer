@@ -8,6 +8,8 @@ class Conferencer_CustomPostType {
 	
 	var $options = array();
 	
+	var $conferencer_options = array();
+	
 	function __construct() {
 		add_action('init', array(&$this, 'register_post_type'));
 		add_action('init', array(&$this, 'set_options'));
@@ -20,6 +22,8 @@ class Conferencer_CustomPostType {
 		add_action('after_setup_theme', array(&$this, 'add_image_sizes'));
 		
 		Conferencer::$post_types[] = $this->slug;
+		
+		$this->conferencer_options = get_option('conferencer_options');
 
 		$this->options['order'] = array(
 			'type' => 'int',

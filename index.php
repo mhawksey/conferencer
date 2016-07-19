@@ -15,7 +15,7 @@ Author URI: http://conferencer.louddog.com/
 
 session_start();
 
-define('CONFERENCER_VERSION', '0.3');
+define('CONFERENCER_VERSION', '0.3.2');
 define('CONFERENCER_PATH', dirname(__FILE__));
 define('CONFERENCER_URL', plugin_dir_url(__FILE__));
 define('CONFERENCER_REGISTER_FILE', __FILE__);
@@ -45,6 +45,8 @@ class Conferencer {
 			'/models/room.php',
 			'/models/time_slot.php',
 			'/models/track.php',
+			'/models/type.php',
+			'/models/chair.php',
 			'/models/sponsor.php',
 			'/models/sponsor_level.php',
 			
@@ -136,7 +138,7 @@ class Conferencer {
 	// static user functions =========================================================
 
 	function add_meta(&$post) {
-		if (!$post || !$post->post_type || !in_array($post->post_type, self::$post_types)) return;
+		if (!$post || !$post->post_type || !in_array($post->post_type, self::$post_types) || $post->ID == 0) return;
 		
 		foreach (get_post_custom($post->ID) as $key => $value) {
 			if (strpos($key, '_conferencer_') !== 0) continue;
@@ -158,13 +160,13 @@ class Conferencer {
 			if (!is_array($post_ids)) $post_ids = array($post_ids);
 			$args['include'] = $post_ids;
 		}
-		
+
 		$posts = array();
 		foreach (get_posts($args) as $post) {
 			$posts[$post->ID] = $post;
 		}
 		
-		if (method_exists('Conferencer', $sort)) uasort($posts, array('Conferencer', $sort));
+		if (method_exists('Conferencer', $sort)) @uasort($posts, array('Conferencer', $sort));
 		
 		return $posts;
 	}
@@ -210,6 +212,7 @@ class Conferencer {
 		}
 		
 		uasort($sessions, array('Conferencer', 'order_sort'));
+		//natsort($sessions);
 		uasort($sessions, array('Conferencer', 'start_time_sort'));
 
 		return $sessions;
@@ -220,6 +223,14 @@ class Conferencer {
 	function order_sort($a, $b) {
 		$aOrder = get_post_meta($a->ID, '_conferencer_order', true);
 		$bOrder = get_post_meta($b->ID, '_conferencer_order', true);
+		
+		if ($aOrder == $bOrder) return 0;
+		return $aOrder < $bOrder ? -1 : 1;
+	}
+	
+	function id_or_order_sort($a, $b) {
+		$aOrder = (get_post_meta($a->ID, '_conferencer_order', true)) ? get_post_meta($a->ID, '_conferencer_order', true) : $a->ID;
+		$bOrder = (get_post_meta($b->ID, '_conferencer_order', true)) ? get_post_meta($b->ID, '_conferencer_order', true) : $b->ID;
 		
 		if ($aOrder == $bOrder) return 0;
 		return $aOrder < $bOrder ? -1 : 1;

@@ -30,6 +30,16 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 				'label' => "Track",
 				'options' => array(), // set below
 			),
+			'type' => array(
+				'type' => 'select',
+				'label' => "Type",
+				'options' => array(), // set below
+			),
+			'chair' => array(
+				'type' => 'select',
+				'label' => "Chair",
+				'options' => array(), // set below
+			),
 			'speakers' => array(
 				'type' => 'multi-select',
 				'label' => "Speakers",
@@ -43,14 +53,19 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 		));
 
 		foreach ($this->options as $key => $option) {
-			foreach (Conferencer::get_posts($key, false, 'title_sort') as $post) {
+			if ($key == 'time_slot'){
+				$posts = Conferencer::get_posts($key, false, 'start_time_sort');
+			} else {
+				$posts = Conferencer::get_posts($key, false, 'title_sort');
+			}
+			foreach ($posts as $post) {
 				$text = $post->post_title;
 				
 				if ($key == 'time_slot') {
 					Conferencer::add_meta($post);
 					if ($post->non_session) continue;
 					if ($post->starts) {
-						$text = date('n/j/y, g:iA', $post->starts);
+						$text = date($this->conferencer_options['date_format'].', g:iA', $post->starts);
 						if ($post->ends) $text .= ' &ndash; '.date('g:iA', $post->ends);
 					} else $text = 'unscheduled';
 				}
@@ -89,10 +104,11 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 		$columns = parent::columns($columns);
 		$columns['conferencer_session_keynote'] = "Keynote";
 		$columns['conferencer_session_speakers'] = "Speakers";
+		$columns['conferencer_session_chair'] = "Chair";
 		$columns['conferencer_session_track'] = "Track";
 		$columns['conferencer_session_room'] = "Room";
 		$columns['conferencer_session_time_slot'] = "Time Slot";
-		$columns['conferencer_session_sponsors'] = "Sponsors";
+
 		return $columns;
 	}
 	
@@ -117,19 +133,11 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 				
 				echo implode(', ', $links);
 				break;
-			case 'sponsors':
-				$links = array();
-				foreach (Conferencer::get_posts('sponsor', $post->sponsors) as $sponsor) {
-					$links[] =
-						"<a href='post.php?action=edit&post=$sponsor->ID'>".
-						str_replace(' ', '&nbsp;', $sponsor->post_title).
-						"</a>";
-				}
-				
-				echo implode(', ', $links);
-				break;
 			case 'track':
 				if ($post->track) echo "<a href='post.php?action=edit&post=$post->track'>".get_the_title($post->track)."</a>";
+				break;
+			case 'chair':
+				if ($post->chair) echo "<a href='post.php?action=edit&post=$post->chair'>".get_the_title($post->chair)."</a>";
 				break;
 			case 'room':
 				if ($post->room) echo "<a href='post.php?action=edit&post=$post->room'>".get_the_title($post->room)."</a>";
@@ -140,7 +148,7 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 					$ends = floatVal(get_post_meta($post->time_slot, '_conferencer_ends', true));
 					
 					echo "<a href='post.php?action=edit&post=$post->time_slot'>";
-					echo date('n/j/y', $starts);
+					echo date($this->conferencer_options['date_format'], $starts);
 					echo '<br />';
 					echo date('g:ia', $starts);
 					if ($ends) echo '&mdash;'.date('g:ia', $ends);

@@ -1,5 +1,5 @@
 <fieldset id="conference_options">
-	<table>
+	
 		<?php
 			Conferencer::add_meta($post);
 			$user_option_count = 0;
@@ -9,17 +9,18 @@
 				if ($option['type'] == 'internal') continue;
 				$user_option_count++;
 				$value = isset($$name) ? $$name : $post->$name;
+				
 				$name = "conferencer_$name";
 			?>
 			
-			<tr>
-				<td class="label">
-					<label for="<?php echo $name; ?>">
+			<div class="con_field">
+				
+					<label for="<?php echo $name; ?>" class="con_label">
 						<?php echo $option['label']; ?>
 					</label>
-				</td>
 				
-				<td class="input">
+				
+				<span class="con_input">
 					<?php if ($option['type'] == 'text') { ?>
 						<input
 							class="text"
@@ -109,10 +110,9 @@
 							<?php if ($value) echo 'checked'; ?>
 						/>
 					<?php } else echo 'unknown option type'; ?>
-				</td>
-			</tr>
+				</span>
+			</div>
 		<?php } ?>
-	</table>
 	<?php if (!$user_option_count) { ?>
 		<p>There aren't any Conferencer options for <?php echo $this->plural; ?>.</p>
 	<?php } ?>

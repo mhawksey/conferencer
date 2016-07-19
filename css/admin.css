@@ -5,6 +5,7 @@
 #toplevel_page_conferencer .wp-menu-image,
 #menu-posts-session .wp-menu-image,
 #menu-posts-speaker .wp-menu-image,
+#menu-posts-chair .wp-menu-image,
 #menu-posts-room .wp-menu-image,
 #menu-posts-time_slot .wp-menu-image,
 #menu-posts-track .wp-menu-image,
@@ -25,6 +26,10 @@
 #menu-posts-speaker .wp-menu-image { background-position: -56px -18px !important; }
 #menu-posts-speaker:hover .wp-menu-image,
 #menu-posts-speaker.wp-has-current-submenu .wp-menu-image {	background-position: -56px 6px !important; }
+
+#menu-posts-chair .wp-menu-image { background-position: -56px -18px !important; }
+#menu-posts-chair:hover .wp-menu-image,
+#menu-posts-chair.wp-has-current-submenu .wp-menu-image {	background-position: -56px 6px !important; }
 
 #menu-posts-room .wp-menu-image { background-position: -84px -18px !important; }
 #menu-posts-room:hover .wp-menu-image,
@@ -52,16 +57,20 @@
 
 /* Post edit page options */
 
-fieldset#conference_options table { width: 98%; }
+fieldset#conference_options .con_field { display:table-row; }
 
-fieldset#conference_options td.label { white-space: nowrap; }
+fieldset#conference_options .con_label { white-space: nowrap; display: table-cell; vertical-align: baseline; }
+fieldset#conference_options .con_input { display: table-cell; width: 100%; padding: 1px 0 1px 3px; }
+fieldset#conference_options .con_input select { width: 98%; }
+fieldset#conference_options ul, fieldset#conference_options ul li { margin:0; }
+fieldset#conference_options ul { margin-top:3px; }
 
-fieldset#conference_options td.input { width: 100%; }
+/*fieldset#conference_options td.input { width: 100%; }
 fieldset#conference_options input.text { width: 100%; }
 fieldset#conference_options input.int { width: 40px; }
 fieldset#conference_options input.date { width: 50%; }
 fieldset#conference_options input.time { width: 45%; }
-fieldset#conference_options input.money { width: 70px; }
+fieldset#conference_options input.money { width: 70px; }*/
 
 /* Reordering */
 

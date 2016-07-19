@@ -4,6 +4,7 @@ new Conferencer_Settings_Options();
 class Conferencer_Settings_Options {
 	var $defaults = array(
 		'add_to_page' => true,
+		'date_format' => 'n/j/Y'
 	);	
 	
 	function __construct() {
@@ -15,7 +16,7 @@ class Conferencer_Settings_Options {
 	}
 	
 	function activate() {
-		add_option('conferencer_options', array('add_to_page' => true));
+		add_option('conferencer_options', array('add_to_page' => true, 'date_format' => 'n/j/Y'));
 	}
 
 	function deactivate() {
@@ -27,11 +28,13 @@ class Conferencer_Settings_Options {
 		add_settings_section('conferencer_options', "Conferencer Options", array(&$this, 'settings_header'), 'conferencer_options');
 		add_settings_field('conferencer_options_add_to_page', "Add Content to Pages", array(&$this, 'show_field_add_to_page'), 'conferencer_options', 'conferencer_options');
 		add_settings_field('conferencer_options_details_toggle', "Show Session Detail Toggle", array(&$this, 'show_field_details_toggle'), 'conferencer_options', 'conferencer_options');
+		add_settings_field('conferencer_options_date_format', "Date format", array(&$this, 'show_field_date_format'), 'conferencer_options', 'conferencer_options');
 	}
 	
 	function validate($input) {
 		$this->options['add_to_page'] = isset($input['add_to_page']);
 		$this->options['details_toggle'] = isset($input['details_toggle']);
+		$this->options['date_format'] = $input['date_format'];
 		return $this->options;
 	}
 	
@@ -61,6 +64,15 @@ class Conferencer_Settings_Options {
 		<label for="conferencer_options_details_toggle">
 			Show Session Detail Toggle
 		</label>
+	<?php }
+	
+	function show_field_date_format() { ?>
+		<input
+			type="text"
+			name="conferencer_options[date_format]"
+			id="conferencer_options_date_format"
+			value="<?php echo ($this->options['date_format']); ?>"
+		/>
 	<?php }
 	
 	function admin_menu() {

@@ -4,11 +4,10 @@ new Conferencer_Settings_Order();
 class Conferencer_Settings_Order {
 	static $priority_post_types = array(
 		'track' => "Tracks",
+		'type' => "Types",
 		'room' => "Rooms",
-		'speaker' => "Speakers",
 		'sponsor' => "Sponsors",
 		'sponsor_level' => "Sponsor Levels",
-		'company' => "Companies",
 	);
 	
 	function __construct() {

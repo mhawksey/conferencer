@@ -24,23 +24,29 @@ class Conferencer_Sponsors_Widget extends WP_Widget {
 	
 	function widget($args, $instance) {
 		global $wp_query;
-		
 		extract($args);
 		
 		$levels = Conferencer::get_posts('sponsor_level');
+		/*$levels = new WP_Query( array(
+							'posts_per_page'   => 5,
+							'post_type'        => 'sponsor_level',
+							'post_status'      => 'publish'));*/
+		//echo ("<!-- ");
+		//print_r($levels);
+		//echo (" -->");
 		foreach ($levels as $id => $level) {
 			$levels[$id]->sponsors = array();
 		}
+		$level_dimensions = get_option('conferencer_sponsors_widget_image_sizes', array());
 		
 		foreach (Conferencer::get_posts('sponsor') as $sponsor) {
-			Conferencer::add_meta($sponsor);
+			Conferencer::add_meta($sponsor, false, 'title_sort');
 			$levels[$sponsor->level]->sponsors[$sponsor->ID] = $sponsor;
 		}
 
 		foreach ($levels as $id => $level) {
 			shuffle($levels[$id]->sponsors);
-		}
-		
+		}		
 		$title = apply_filters(
 			'widget_title',
 			empty($instance['title']) ? 'Sponsors' : $instance['title'],
@@ -52,8 +58,11 @@ class Conferencer_Sponsors_Widget extends WP_Widget {
 		foreach ($levels as $level) { ?>
 			<?php if (count($level->sponsors)) { ?>
 				<div class="sponsor_level sponsor_<?php echo $level->post_name; ?>">
+                <!-- 
+				<?php //print_r($level_dimensions);
+				?> -->
 					<h4><?php echo $level->post_title; ?></h4>
-					<div class="sponsors">
+					<div class="sponsors" style="height:<?php echo $level_dimensions[$level->ID]['height']?>px">
 						<?php foreach ($level->sponsors as $sponsor) { ?>
 							<div class="sponsor">
 								<?php
