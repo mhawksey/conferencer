@@ -6,7 +6,7 @@ if (!function_exists('implode_with_serial_and')) {
 		if (count($args) == 1) return $args[0];
 		
 		$last = array_pop($args);
-		return implode(', ', $args).', and '.$last;
+		return implode(',', $args).', and'.$last;
 	}
 }
 
@@ -19,7 +19,7 @@ if (!function_exists('comma_separated_post_titles')) {
 		foreach ($posts as $post) {
 			$item = $post->post_title;
 			if ($link) $item = "<a href='".get_permalink($post->ID)."'>$item</a>";
-			if ($serial_and && ++$count > 1 && $count == count($posts)) $item = " and $item";
+			if ($serial_and && ++$count > 1 && $count == count($posts)) $item = "and $item";
 			$items[] = $item;
 		}
 		

@@ -54,7 +54,8 @@ class Conferencer {
 			'/shortcodes/agenda.php',
 			'/shortcodes/session-meta.php',
 			'/shortcodes/sessions.php',
-			'/shortcodes/speaker-meta.php',			
+			'/shortcodes/speaker-meta.php',	
+			'/shortcodes/speakers.php',		
 			
 			'/widgets/sponsors.php',
 			
@@ -165,8 +166,11 @@ class Conferencer {
 		foreach (get_posts($args) as $post) {
 			$posts[$post->ID] = $post;
 		}
-		
-		if (method_exists('Conferencer', $sort)) @uasort($posts, array('Conferencer', $sort));
+		if (method_exists('Conferencer', $sort) && $sort == 'natural_sort'){
+			$posts = Conferencer::natural_sort($posts, $post_ids);
+		}elseif (method_exists('Conferencer', $sort)) {
+			@uasort($posts, array('Conferencer', $sort));
+		}
 		
 		return $posts;
 	}
@@ -239,6 +243,14 @@ class Conferencer {
 	function title_sort($a, $b) {
 		if ($a->post_title == $b->post_title) return 0;
 		return strcmp($a->post_title, $b->post_title);
+	}
+	
+	function natural_sort ($input, $order) {
+	  $result = array();
+	  foreach ($order as $item) {
+		$result[] = $input[$item];
+	  }
+	  return $result;
 	}
 	
 	function start_time_sort($a, $b) {

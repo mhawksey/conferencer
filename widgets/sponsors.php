@@ -59,7 +59,7 @@ class Conferencer_Sponsors_Widget extends WP_Widget {
 			<?php if (count($level->sponsors)) { ?>
 				<div class="sponsor_level sponsor_<?php echo $level->post_name; ?>">
                 <!-- 
-				<?php //print_r($level_dimensions);
+				<?php // print_r($level->ID);
 				?> -->
 					<h4><?php echo $level->post_title; ?></h4>
 					<div class="sponsors" style="height:<?php echo $level_dimensions[$level->ID]['height']?>px">
@@ -67,7 +67,9 @@ class Conferencer_Sponsors_Widget extends WP_Widget {
 							<div class="sponsor">
 								<?php
 									$html = $sponsor->post_title;
-									
+				echo("<!-- "); 
+				  print_r($sponsor->ID);
+				echo(" -->");
 									if (has_post_thumbnail($sponsor->ID)) {
 										$html = get_the_post_thumbnail(
 											$sponsor->ID,

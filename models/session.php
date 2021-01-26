@@ -104,7 +104,7 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 		$columns = parent::columns($columns);
 		$columns['conferencer_session_keynote'] = "Keynote";
 		$columns['conferencer_session_speakers'] = "Speakers";
-		$columns['conferencer_session_chair'] = "Chair";
+		$columns['conferencer_session_chairs'] = "Chairs";
 		$columns['conferencer_session_track'] = "Track";
 		$columns['conferencer_session_room'] = "Room";
 		$columns['conferencer_session_time_slot'] = "Time Slot";
@@ -136,7 +136,7 @@ class Conferencer_Session extends Conferencer_CustomPostType {
 			case 'track':
 				if ($post->track) echo "<a href='post.php?action=edit&post=$post->track'>".get_the_title($post->track)."</a>";
 				break;
-			case 'chair':
+			case 'chairs':
 				if ($post->chair) echo "<a href='post.php?action=edit&post=$post->chair'>".get_the_title($post->chair)."</a>";
 				break;
 			case 'room':

@@ -83,7 +83,7 @@ class Conferencer_Shortcode_Agenda extends Conferencer_Shortcode {
 	
 		// Get all session information
 	
-		$sessions = Conferencer::get_posts('session', false, 'title_sort');
+		$sessions = Conferencer::get_posts('session', false, 'order_sort');
 		foreach (array_keys($sessions) as $id) {
 			Conferencer::add_meta($sessions[$id]);
 		}

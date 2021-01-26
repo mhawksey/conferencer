@@ -19,7 +19,6 @@ jQuery(function($) {
 			$('#conferencer_logo_regeneration_needed').slideDown();
 		}
 	});
-	
 	conferencer = {
 		tinymce_button: function(opts) {
 			var options = {
